@@ -33,13 +33,20 @@ function configureSynth() {
     const volume = new Tone.Volume(-12).toDestination();
     const synth = new Tone.PolySynth(Tone.Synth).connect(volume);
     const chordButtons = document.querySelectorAll(".btn-chord");
+    const playDurationSeconds = 0.6;
     let selectedChord = null;
 
     // map chords to buttons
     for (let button of chordButtons) {
         button.addEventListener("click", () => {
             selectedChord = chords[button.id];
-            synth.triggerAttackRelease(selectedChord, 0.6, Tone.now());
+            synth.triggerAttackRelease(selectedChord, playDurationSeconds, Tone.now());
+
+            // highlight button while playing audio
+            button.classList.toggle("btn-active");
+            window.setTimeout(() => {
+                button.classList.toggle("btn-active");
+            }, playDurationSeconds * 1000); // multiply by 1k to convert seconds to ms
         });
     }
 }
